@@ -3,7 +3,7 @@ package org.example.wishlistapp.model;
 import java.math.BigDecimal;
 
 public class Wish {
-    private String wishName;
+    private String wishTitle;
     private String wishDescription;
     private int wishId;
     private BigDecimal wishPrice;
@@ -11,19 +11,19 @@ public class Wish {
     public Wish() {
     }
 
-    public Wish(String wishName, String wishDescription, int wishId, BigDecimal wishPrice) {
-        this.wishName = wishName;
+    public Wish(String wishTitle, String wishDescription, int wishId, BigDecimal wishPrice) {
+        this.wishTitle = wishTitle;
         this.wishDescription = wishDescription;
         this.wishId = wishId;
         this.wishPrice = wishPrice;
     }
 
-    public String getWishName() {
-        return wishName;
+    public String getWishTitle() {
+        return wishTitle;
     }
 
-    public void setWishName(String wishName) {
-        this.wishName = wishName;
+    public void setWishTitle(String wishTitle) {
+        this.wishTitle = wishTitle;
     }
 
     public String getWishDescription() {
@@ -52,6 +52,6 @@ public class Wish {
 
     @Override
     public String toString() {
-        return wishName + wishDescription + wishId + wishPrice;
+        return wishTitle + wishDescription + wishId + wishPrice;
     }
 }

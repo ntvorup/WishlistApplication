@@ -7,16 +7,16 @@ public class Wishlist {
 
     private int wishlistId;
     private int userId;
-    private String title;
-    private String description;
-    private List<Wish> wishes;
+    private String wishlistTitle;
+    private String wishlistDescription;
+    private List<Wish> listOfWishes;
 
-    public Wishlist(int wishlistId, int userId, String title, String description) {
+    public Wishlist(int wishlistId, int userId, String wishlistTitle, String wishlistDescription) {
         this.wishlistId = wishlistId;
         this.userId = userId;
-        this.title = title;
-        this.description = description;
-        this.wishes = new ArrayList<>();
+        this.wishlistTitle = wishlistTitle;
+        this.wishlistDescription = wishlistDescription;
+        this.listOfWishes = new ArrayList<>();
     }
 
     public Wishlist(){
@@ -41,44 +41,44 @@ public class Wishlist {
         this.userId = userId;
     }
 
-    public String getTitle() {
-        return title;
+    public String getWishlistTitle() {
+        return wishlistTitle;
     }
 
-    public void setTitle(String title) {
-        this.title = title;
+    public void setWishlistTitle(String wishlistTitle) {
+        this.wishlistTitle = wishlistTitle;
     }
 
-    public String getDescription() {
-        return description;
+    public String getWishlistDescription() {
+        return wishlistDescription;
     }
 
-    public void setDescription(String description) {
-        this.description = description;
+    public void setWishlistDescription(String wishlistDescription) {
+        this.wishlistDescription = wishlistDescription;
     }
 
-    public List<Wish> getWishes() {
-        return wishes;
+    public List<Wish> getListOfWishes() {
+        return listOfWishes;
     }
 
-    public void setWishes(List<Wish> wishes) {
-        this.wishes = wishes;
+    public void setListOfWishes(List<Wish> listOfWishes) {
+        this.listOfWishes = listOfWishes;
     }
 
 
     //Metoder til at administrere ønsker
 
     public void addWish (Wish wish){
-        wishes.add(wish);
+        listOfWishes.add(wish);
     }
 
     //Fjerner et specifikt Wish-objekt fra listen
     public void removeWish(Wish wish) {
-        wishes.remove(wish);
+        listOfWishes.remove(wish);
     }
 
     //Fjerne et ønske udfra dets ID - Kan vi bruge når vi kun kender til ID'et
     public void removeWish(int wishId) {
-        wishes.removeIf(wish -> wish.getWishId() == wishId);
+        listOfWishes.removeIf(wish -> wish.getWishId() == wishId);
     }
 }
