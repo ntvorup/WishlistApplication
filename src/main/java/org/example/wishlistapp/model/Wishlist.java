@@ -19,6 +19,9 @@ public class Wishlist {
         this.wishes = new ArrayList<>();
     }
 
+    public Wishlist(){
+    }
+
 
     // Getters og setters
 

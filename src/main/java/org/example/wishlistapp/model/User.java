@@ -1,4 +1,4 @@
-package org.example.wishlistapp.Model;
+package org.example.wishlistapp.model;
 
 import java.time.LocalDate;
 
@@ -8,7 +8,6 @@ public class User {
     private String lastName;
     private String email;
     private String password;
-    private LocalDate birthday;
 
     public User(int UserID, String firstName, String lastName, String email, String password, LocalDate birthday) {
         this.UserID = UserID;
@@ -16,7 +15,6 @@ public class User {
         this.lastName = lastName;
         this.email = email;
         this.password = password;
-        this.birthday = birthday;
     }
 
     public User() {
@@ -62,17 +60,8 @@ public class User {
         this.password = password;
     }
 
-    public LocalDate getBirthday() {
-        return birthday;
-    }
-
-    public void setBirthday(LocalDate birthday) {
-        this.birthday = birthday;
-    }
-
     @Override
     public String toString() {
-        return UserID + lastName + ", " + firstName + birthday + email + password;
+        return UserID + lastName + ", " + firstName + email + password;
     }
-
 }
