@@ -1,5 +1,8 @@
 package org.example.wishlistapp.model;
 
+import org.example.wishlistapp.exceptions.wishlist.WishAlreadyExistsException;
+import org.example.wishlistapp.exceptions.wishlist.WishNotFoundException;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -19,7 +22,7 @@ public class Wishlist {
         this.listOfWishes = new ArrayList<>();
     }
 
-    public Wishlist(){
+    public Wishlist() {
     }
 
 
@@ -68,17 +71,34 @@ public class Wishlist {
 
     //Metoder til at administrere ønsker
 
-    public void addWish (Wish wish){
+    public void addWish(Wish wish) {
+        for (Wish existingWish : listOfWishes) {
+            if (existingWish.getWishId() == wish.getWishId()) {
+                throw new WishAlreadyExistsException("Wish with ID " + wish.getWishId() + " already exists in wishlist");
+            }
+        }
         listOfWishes.add(wish);
     }
 
-    //Fjerner et specifikt Wish-objekt fra listen
+    // Fjerner et specifikt Wish-objekt fra listen
     public void removeWish(Wish wish) {
-        listOfWishes.remove(wish);
+        if (wish == null) {
+            throw new NullPointerException("Wish cannot be null");
+        }
+
+        boolean removed = listOfWishes.remove(wish);
+        if (!removed) {
+            throw new WishNotFoundException(String.valueOf(wishlistId), String.valueOf(wish.getWishId()));
+        }
     }
 
-    //Fjerne et ønske udfra dets ID - Kan vi bruge når vi kun kender til ID'et
+    // Fjerne et ønske udfra dets ID - Kan vi bruge når vi kun kender til ID'et
     public void removeWish(int wishId) {
+        int initialSize = listOfWishes.size();
         listOfWishes.removeIf(wish -> wish.getWishId() == wishId);
+
+        if (listOfWishes.size() == initialSize) {
+            throw new WishNotFoundException(String.valueOf(wishlistId), String.valueOf(wishId));
+        }
     }
 }
