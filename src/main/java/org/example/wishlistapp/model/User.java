@@ -4,6 +4,7 @@ import java.time.LocalDate;
 
 public class User {
     private int UserID;
+    private String userName;
     private String firstName;
     private String lastName;
     private String email;
@@ -60,8 +61,17 @@ public class User {
         this.password = password;
     }
 
+    public String getUserName() {
+        return userName;
+    }
+
+    public void setUserName(String userName) {
+        this.userName = userName;
+    }
+
     @Override
     public String toString() {
         return UserID + lastName + ", " + firstName + email + password;
     }
+
 }
