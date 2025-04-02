@@ -71,6 +71,15 @@ public class Wishlist {
 
     //Metoder til at administrere ønsker
 
+    public Wish getWishById(int wishId) {
+        for (Wish wish : listOfWishes) {
+            if (wish.getWishId() == wishId) {
+                return wish;
+            }
+        }
+        throw new WishNotFoundException(String.valueOf(wishlistId), String.valueOf(wishId));
+    }
+
     public void addWish(Wish wish) {
         for (Wish existingWish : listOfWishes) {
             if (existingWish.getWishId() == wish.getWishId()) {
