@@ -31,8 +31,8 @@ public class WishlistRepository extends Repository<Wish> {
                 newWishToAdd.getWishTitle(),
                 newWishToAdd.getWishDescription(),
                 newWishToAdd.getWishPrice(),
-                newWishToAdd.getWishURL(),
-                newWishToAdd.getWishImageUrl());
+                newWishToAdd.getProductUrl(),
+                newWishToAdd.getImageUrl());
     }
 
     //Deletes the wish from the wishlist.
@@ -78,8 +78,8 @@ public class WishlistRepository extends Repository<Wish> {
                     newWish.getWishTitle(),
                     newWish.getWishDescription(),
                     newWish.getWishPrice(),
-                    newWish.getWishURL(),
-                    newWish.getWishImageUrl(),
+                    newWish.getProductUrl(),
+                    newWish.getImageUrl(),
                     newWish.getWishId()) == 1;
         } catch (DataAccessException e){
             return false;
