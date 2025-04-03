@@ -12,8 +12,6 @@ public abstract class Repository<T> implements IRepository<T> {
     @Override
     public abstract T findById(int id);
 
-    @Override
-    public abstract List<T> getAll();
 
     @Override
     public abstract Boolean edit(T newObject);

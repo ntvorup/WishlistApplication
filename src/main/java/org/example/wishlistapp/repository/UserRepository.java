@@ -47,7 +47,7 @@ public class UserRepository extends Repository<User>{
         }
     }
 
-    @Override
+
     @Transactional
     public List<User> getAll() {
         String sql = "SELECT * FROM users";
