@@ -25,6 +25,11 @@ jobs:
           distribution: 'microsoft'
 
       - name: Build with Maven
+        env:
+          DEV_DATABASE_URL: ${{secrets.DEV_DATABASE_URL}}
+          DEV_USERNAME: ${{secrets.DEV_USERNAME}}
+          DEV_PASSWORD: ${{secrets.DEV_PASSWORD}}
+          
         run: mvn clean install
 
       - name: Upload artifact for deployment job
