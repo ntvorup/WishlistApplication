@@ -7,21 +7,21 @@ public class Wish {
     private String wishDescription;
     private int wishId;
     private BigDecimal wishPrice;
+    private String productUrl;
+    private String imageUrl;
     private int wishlistId;
-    private String wishURL;
-    private String wishImageUrl;
 
     public Wish() {
     }
 
-    public Wish(String wishTitle, String wishDescription, int wishId, BigDecimal wishPrice, int wishlistId, String wishImageUrl, String wishURL) {
+    public Wish(String wishTitle, String wishDescription, int wishId, BigDecimal wishPrice, String productUrl, String imageUrl, int wishlistId) {
         this.wishTitle = wishTitle;
         this.wishDescription = wishDescription;
         this.wishId = wishId;
         this.wishPrice = wishPrice;
+        this.productUrl = productUrl;
+        this.imageUrl = imageUrl;
         this.wishlistId = wishlistId;
-        this.wishURL = wishURL;
-        this.wishImageUrl = wishImageUrl;
     }
 
     public String getWishTitle() {
@@ -56,9 +56,27 @@ public class Wish {
         this.wishPrice = wishPrice;
     }
 
+    public String getProductUrl() {
+        return productUrl;
+    }
+
+    public void setProductUrl(String productUrl) {
+        this.productUrl = productUrl;
+    }
+
+    public String getImageUrl() {
+        return imageUrl;
+    }
+
+    public void setImageUrl(String imageUrl) {
+        this.imageUrl = imageUrl;
+    }
+
     @Override
     public String toString() {
-        return wishTitle + wishDescription + wishId + wishPrice;
+        return wishTitle + wishDescription + wishId + wishPrice +
+                (productUrl != null ? " " + productUrl : "") +
+                (imageUrl != null ? " " + imageUrl : "");
     }
 
     public int getWishlistId() {
@@ -67,17 +85,5 @@ public class Wish {
 
     public void setWishlistId(int wishlistId) {
         this.wishlistId = wishlistId;
-    }
-
-    public String getWishURL() {
-        return wishURL;
-    }
-
-    public void setWishURL(String wishURL) {
-        this.wishURL = wishURL;
-    }
-
-    public String getWishImageUrl() {
-        return wishImageUrl;
     }
 }
