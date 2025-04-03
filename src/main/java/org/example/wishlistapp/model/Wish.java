@@ -8,16 +8,20 @@ public class Wish {
     private int wishId;
     private BigDecimal wishPrice;
     private int wishlistId;
+    private String wishURL;
+    private String wishImageUrl;
 
     public Wish() {
     }
 
-    public Wish(String wishTitle, String wishDescription, int wishId, BigDecimal wishPrice, int wishlistId) {
+    public Wish(String wishTitle, String wishDescription, int wishId, BigDecimal wishPrice, int wishlistId, String wishImageUrl, String wishURL) {
         this.wishTitle = wishTitle;
         this.wishDescription = wishDescription;
         this.wishId = wishId;
         this.wishPrice = wishPrice;
         this.wishlistId = wishlistId;
+        this.wishURL = wishURL;
+        this.wishImageUrl = wishImageUrl;
     }
 
     public String getWishTitle() {
@@ -63,5 +67,17 @@ public class Wish {
 
     public void setWishlistId(int wishlistId) {
         this.wishlistId = wishlistId;
+    }
+
+    public String getWishURL() {
+        return wishURL;
+    }
+
+    public void setWishURL(String wishURL) {
+        this.wishURL = wishURL;
+    }
+
+    public String getWishImageUrl() {
+        return wishImageUrl;
     }
 }
