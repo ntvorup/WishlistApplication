@@ -3,15 +3,14 @@ package org.example.wishlistapp.model;
 import java.time.LocalDate;
 
 public class User {
-    private int UserID;
-    private String userName;
+    private int userID;
     private String firstName;
     private String lastName;
     private String email;
     private String password;
 
     public User(int UserID, String firstName, String lastName, String email, String password) {
-        this.UserID = UserID;
+        this.userID = UserID;
         this.firstName = firstName;
         this.lastName = lastName;
         this.email = email;
@@ -22,11 +21,11 @@ public class User {
     }
 
     public int getUserID() {
-        return UserID;
+        return userID;
     }
 
     public void setUserID(int UserID) {
-        this.UserID = UserID;
+        this.userID = UserID;
     }
 
     public String getFirstName() {
@@ -61,17 +60,9 @@ public class User {
         this.password = password;
     }
 
-    public String getUserName() {
-        return userName;
-    }
-
-    public void setUserName(String userName) {
-        this.userName = userName;
-    }
-
     @Override
     public String toString() {
-        return UserID + lastName + ", " + firstName + email + password;
+        return userID + lastName + ", " + firstName + email + password;
     }
 
 }
