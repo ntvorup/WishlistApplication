@@ -9,17 +9,19 @@ public class Wish {
     private BigDecimal wishPrice;
     private String productUrl;
     private String imageUrl;
+    private int wishlistId;
 
     public Wish() {
     }
 
-    public Wish(String wishTitle, String wishDescription, int wishId, BigDecimal wishPrice, String productUrl, String imageUrl) {
+    public Wish(String wishTitle, String wishDescription, int wishId, BigDecimal wishPrice, String productUrl, String imageUrl, int wishlistId) {
         this.wishTitle = wishTitle;
         this.wishDescription = wishDescription;
         this.wishId = wishId;
         this.wishPrice = wishPrice;
         this.productUrl = productUrl;
         this.imageUrl = imageUrl;
+        this.wishlistId = wishlistId;
     }
 
     public String getWishTitle() {
@@ -75,5 +77,13 @@ public class Wish {
         return wishTitle + wishDescription + wishId + wishPrice +
                 (productUrl != null ? " " + productUrl : "") +
                 (imageUrl != null ? " " + imageUrl : "");
+    }
+
+    public int getWishlistId() {
+        return wishlistId;
+    }
+
+    public void setWishlistId(int wishlistId) {
+        this.wishlistId = wishlistId;
     }
 }
