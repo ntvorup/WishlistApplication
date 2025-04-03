@@ -1,4 +1,4 @@
-/*
+
 package org.example.wishlistapp;
 
 import org.springframework.boot.SpringApplication;
@@ -13,4 +13,4 @@ public class WishlistAppApplication {
 
 }
 
- */
+
