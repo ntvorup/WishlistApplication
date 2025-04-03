@@ -7,15 +7,17 @@ public class Wish {
     private String wishDescription;
     private int wishId;
     private BigDecimal wishPrice;
+    private int wishlistId;
 
     public Wish() {
     }
 
-    public Wish(String wishTitle, String wishDescription, int wishId, BigDecimal wishPrice) {
+    public Wish(String wishTitle, String wishDescription, int wishId, BigDecimal wishPrice, int wishlistId) {
         this.wishTitle = wishTitle;
         this.wishDescription = wishDescription;
         this.wishId = wishId;
         this.wishPrice = wishPrice;
+        this.wishlistId = wishlistId;
     }
 
     public String getWishTitle() {
@@ -53,5 +55,13 @@ public class Wish {
     @Override
     public String toString() {
         return wishTitle + wishDescription + wishId + wishPrice;
+    }
+
+    public int getWishlistId() {
+        return wishlistId;
+    }
+
+    public void setWishlistId(int wishlistId) {
+        this.wishlistId = wishlistId;
     }
 }
