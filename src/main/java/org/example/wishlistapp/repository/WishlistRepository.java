@@ -68,9 +68,11 @@ public class WishlistRepository extends Repository<Wishlist> {
         }
     }
 
-    public List<Wishlist> getAllWishlists() {
+    public Map<Integer, Wishlist> getAllWishlists() {
         String sql = "SELECT * FROM wishlists";
-        return jdbcTemplate.query(sql, BeanPropertyRowMapper.newInstance(Wishlist.class));
+        List<Wishlist> wishlists = jdbcTemplate.query(sql, BeanPropertyRowMapper.newInstance(Wishlist.class));
+
+        return wishlists.stream().collect(Collectors.toMap(Wishlist::getWishlistId, Wishlist -> Wishlist));
     }
 
 
@@ -88,7 +90,7 @@ public class WishlistRepository extends Repository<Wishlist> {
                 newWishToAdd.getImageUrl());
     }
 
-
+    @Transactional
     public void deleteWishFromWishlist(Wish wishToDelete) {
         String sql = "DELETE FROM wishes WHERE wish_id = ?";
 
