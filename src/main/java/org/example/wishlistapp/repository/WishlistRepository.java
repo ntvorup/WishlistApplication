@@ -9,25 +9,78 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 @org.springframework.stereotype.Repository
-public class WishlistRepository extends Repository<Wish> {
+public class WishlistRepository extends Repository<Wishlist> {
 
     private final JdbcTemplate jdbcTemplate;
 
-    public WishlistRepository(JdbcTemplate jdbcTemplate){
+    public WishlistRepository(JdbcTemplate jdbcTemplate) {
         this.jdbcTemplate = jdbcTemplate;
     }
 
-    //Adds the wish to the wishlist
-    //Should only be used when already in a wishlist
+    //Adds wishlist to wishlists in DB.
     @Override
     @Transactional
-    public void addToDatabase(Wish newWishToAdd) {
+    public void addToDatabase(Wishlist newWishlistToAdd) {
+        String sql = "INSERT INTO wishlists (user_id, title) VALUES (?,?)";
+
+        jdbcTemplate.update(sql, newWishlistToAdd.getUserId(), newWishlistToAdd.getWishlistTitle());
+
+    }
+
+    //Deletes the wishlist from the DB
+    @Override
+    @Transactional
+    public void deleteFromDatabase(Wishlist wishlistToDelete) {
+        String sql = "DELETE FROM wishlists WHERE wishlist_id = ?";
+
+        jdbcTemplate.update(sql, wishlistToDelete.getWishlistId());
+    }
+
+    //Returns the wishlist that is clicked on, on the website with the associated ID.
+    @Override
+    @Transactional
+    public Wishlist findById(int wishlistId) {
+        String sql = "SELECT * FROM wishlists WHERE wishlist_id = ?";
+
+        try {
+            return jdbcTemplate.queryForObject(sql, BeanPropertyRowMapper.newInstance(Wishlist.class), wishlistId);
+        } catch (EmptyResultDataAccessException e) {
+            return null;
+        }
+    }
+
+    @Override
+    @Transactional
+    public Boolean edit(Wishlist newWishlist) {
+        String sql = "UPDATE wishlists " +
+                "SET title = ? " +
+                "WHERE wishlist_id = ?";
+
+        try {
+            return jdbcTemplate.update(sql, newWishlist.getWishlistTitle(),
+                    newWishlist.getWishlistId()) == 1;
+        } catch (DataAccessException e) {
+            return false;
+        }
+    }
+
+    public List<Wishlist> getAllWishlists() {
+        String sql = "SELECT * FROM wishlists";
+        return jdbcTemplate.query(sql, BeanPropertyRowMapper.newInstance(Wishlist.class));
+    }
+
+
+    //Wish Methods
+
+    public void addWishToWishlist(Wish newWishToAdd, int wishlistId) {
         String sql = "INSERT INTO wishes (wishlist_id, title, description, price, url, image_url) VALUES (?,?,?,?,?,?)";
 
         jdbcTemplate.update(sql,
-                newWishToAdd.getWishlistId(),
+                wishlistId,
                 newWishToAdd.getWishTitle(),
                 newWishToAdd.getWishDescription(),
                 newWishToAdd.getWishPrice(),
@@ -35,41 +88,15 @@ public class WishlistRepository extends Repository<Wish> {
                 newWishToAdd.getImageUrl());
     }
 
-    //Deletes the wish from the wishlist.
-    //Should only be called whilst already in a wishlist
-    @Override
-    @Transactional
-    public void deleteFromDatabase(Wish objectToDelete) {
+
+    public void deleteWishFromWishlist(Wish wishToDelete) {
         String sql = "DELETE FROM wishes WHERE wish_id = ?";
 
-        jdbcTemplate.update(sql, objectToDelete.getWishId());
+        jdbcTemplate.update(sql, wishToDelete.getWishId());
     }
 
-    //Returns the wish that is clicked upon on the website.
-    //Should only be called when already in a wishlist.
-    @Override
     @Transactional
-    public Wish findById(int wishId) {
-        String sql = "SELECT * FROM wishes WHERE wish_id = ?";
-
-        try {
-            return jdbcTemplate.queryForObject(sql, BeanPropertyRowMapper.newInstance(Wish.class), wishId);
-        } catch (EmptyResultDataAccessException e){
-            return null;
-        }
-    }
-
-    //Gets all the wishes on a wishlist.
-    //Should only be called when already in a wishlist.
-    public List<Wish> getWishesByWishlistId(int wishlistId){
-        String sql = "SELECT * FROM wishes WHERE wishlist_id = ?";
-
-        return jdbcTemplate.query(sql, BeanPropertyRowMapper.newInstance(Wish.class), wishlistId);
-    }
-
-
-    @Override
-    public Boolean edit(Wish newWish) {
+    public boolean updateWish(Wish newWish) {
         String sql = "UPDATE wishes " +
                 "SET wishlist_id = ?, title = ?, description = ?, price = ?, url = ?, image_url = ? " +
                 "WHERE wish_id = ?";
@@ -81,41 +108,17 @@ public class WishlistRepository extends Repository<Wish> {
                     newWish.getProductUrl(),
                     newWish.getImageUrl(),
                     newWish.getWishId()) == 1;
-        } catch (DataAccessException e){
+        } catch (DataAccessException e) {
             return false;
         }
     }
 
-    //Wishlist Methods
+    //Gets all the wishes on a wishlist.
+    public Map<Integer, Wish> getWishesByWishlistId(int wishlistId) {
+        String sql = "SELECT * FROM wishes WHERE wishlist_id = ?";
 
-    public List<Wishlist> getAllWishlists(){
-        String sql = "SELECT * FROM wishlists";
-        return jdbcTemplate.query(sql, BeanPropertyRowMapper.newInstance(Wishlist.class));
+        List<Wish> wishList = jdbcTemplate.query(sql, BeanPropertyRowMapper.newInstance(Wish.class), wishlistId);
+
+        return wishList.stream().collect(Collectors.toMap(Wish::getWishId, wish -> wish));
     }
-
-    public void deleteWishlistFromDB (Wishlist wishlistToDelete){
-        String sql = "DELETE FROM wishlists WHERE wishlist_id = ?";
-
-        jdbcTemplate.update(sql, wishlistToDelete.getWishlistId());
-    }
-
-    public boolean updateWishlist (Wishlist newWishlist){
-        String sql = "UPDATE wishlists " +
-                "SET title = ? " +
-                "WHERE wishlist_id = ?";
-
-        try {
-            return jdbcTemplate.update(sql, newWishlist.getWishlistTitle(),
-                    newWishlist.getWishlistId()) == 1;
-        } catch (DataAccessException e){
-            return false;
-        }
-    }
-
-    public void addWishlistToDatabase(Wishlist wishlist) {
-        String sql = "INSERT INTO wishlists (user_id, title) VALUES (?,?)";
-
-        jdbcTemplate.update(sql, wishlist.getUserId(), wishlist.getWishlistTitle());
-    }
-
 }
