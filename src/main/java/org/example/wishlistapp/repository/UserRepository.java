@@ -31,10 +31,10 @@ public class UserRepository extends Repository<User>{
 
     @Override
     @Transactional
-    public void deleteFromDatabase(User objectToDelete) {
+    public void deleteFromDatabase(User userToDelete) {
         String sql = "DELETE FROM users WHERE user_id = ?";
 
-        jdbcTemplate.update(sql, objectToDelete.getUserID());
+        jdbcTemplate.update(sql, userToDelete.getUserID());
     }
 
     @Override
