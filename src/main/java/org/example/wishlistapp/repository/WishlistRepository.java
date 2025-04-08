@@ -44,7 +44,7 @@ public class WishlistRepository extends Repository<Wishlist> {
     @Override
     @Transactional
     public Wishlist findById(int wishlistId) {
-        String sql = "SELECT * FROM wishlists WHERE wishlist_id = ?";
+        String sql = "SELECT wishlist_id, user_id, title AS wishlistTitle FROM wishlists WHERE wishlist_id = ?";
 
         try {
             return jdbcTemplate.queryForObject(sql, BeanPropertyRowMapper.newInstance(Wishlist.class), wishlistId);

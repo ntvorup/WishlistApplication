@@ -84,7 +84,34 @@ public class WishlistRepositoryTest {
 
     @Test
     public void findById() {
+        // Arrange
+        int existingUserId = 1;
+        String existingTitle = "Fødselsdag";
 
+        // Find den eksisterende ønskeliste for at få dens ID
+        Map<Integer, Wishlist> wishlists = wishlistRepository.getAllWishlists();
+        Integer wishlistId = null;
+
+        for (Map.Entry<Integer, Wishlist> entry : wishlists.entrySet()) {
+            Wishlist w = entry.getValue();
+            if (w.getWishlistTitle() != null &&
+                    w.getWishlistTitle().equals(existingTitle) &&
+                    w.getUserId() == existingUserId) {
+                wishlistId = entry.getKey();
+                break;
+            }
+        }
+
+        assertNotNull(wishlistId, "Kunne ikke finde den eksisterende ønskeliste");
+
+        //Act
+        Wishlist foundWishlist = wishlistRepository.findById(wishlistId);
+
+        //Assert
+        assertNotNull(foundWishlist, "Ønskelisten blev ikke fundet");
+        assertEquals(existingTitle, foundWishlist.getWishlistTitle(), "Ønskelistens titel matcher ikke");
+        assertEquals(existingUserId, foundWishlist.getUserId(), "Ønskelistens bruger-ID matcher ikke");
+        assertEquals(wishlistId, foundWishlist.getWishlistId(), "Ønskelistens ID matcher ikke");
     }
 
     @Test
