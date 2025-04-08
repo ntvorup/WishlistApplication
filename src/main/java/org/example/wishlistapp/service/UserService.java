@@ -15,7 +15,7 @@ public class UserService {
         this.userRepository = userRepository;
     }
 
-    public void addToDatabase(User newUserToAdd){
+    public void addNewUserToDatabase(User newUserToAdd){
         userRepository.addToDatabase(newUserToAdd);
     }
 
@@ -27,17 +27,19 @@ public class UserService {
         return userRepository.findById(id);
     }
 
-    public List<User> getAllUsers(){
-        return userRepository.getAll();
-    }
+//    public List<User> getAllUsers(){
+//        return userRepository.getAll();
+//    }
 
     public Boolean editUser(User newUser){
         return userRepository.edit(newUser);
     }
 
-    public User findByEmail (String email){
-        return userRepository.findByEmail(email);
+    public User findByEmailAndPassword(String email, String password){
+        return userRepository.findByEmailAndPassword(email, password);
     }
 
-
+    public Boolean doesEmailExist(String email){
+        return userRepository.doesEmailExist(email);
+    }
 }

@@ -68,9 +68,9 @@ public class WishlistRepository extends Repository<Wishlist> {
         }
     }
 
-    public Map<Integer, Wishlist> getAllWishlists() {
-        String sql = "SELECT * FROM wishlists";
-        List<Wishlist> wishlists = jdbcTemplate.query(sql, BeanPropertyRowMapper.newInstance(Wishlist.class));
+    public Map<Integer, Wishlist> getAllWishlistsById(int id) {
+        String sql = "SELECT * FROM wishlists WHERE user_id = ?";
+        List<Wishlist> wishlists = jdbcTemplate.query(sql, BeanPropertyRowMapper.newInstance(Wishlist.class), id);
 
         return wishlists.stream().collect(Collectors.toMap(Wishlist::getWishlistId, Wishlist -> Wishlist));
     }
@@ -122,5 +122,11 @@ public class WishlistRepository extends Repository<Wishlist> {
         List<Wish> wishList = jdbcTemplate.query(sql, BeanPropertyRowMapper.newInstance(Wish.class), wishlistId);
 
         return wishList.stream().collect(Collectors.toMap(Wish::getWishId, wish -> wish));
+    }
+
+    public Wish getWishById(int wishId){
+        String sql = "SELECT * FROM wishes WHERE wish_id = ?";
+
+        return jdbcTemplate.queryForObject(sql, BeanPropertyRowMapper.newInstance(Wish.class), wishId);
     }
 }
