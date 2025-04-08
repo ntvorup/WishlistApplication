@@ -115,8 +115,40 @@ public class WishlistRepositoryTest {
     }
 
     @Test
-    public void edit() {
+    public void edit() throws SQLException {
+        // Arrange
+        int existingUserId = 1;
+        String existingTitle = "Fødselsdag";
 
+        Map<Integer, Wishlist> wishlists = wishlistRepository.getAllWishlists();
+        Integer wishlistId = null;
+
+        for (Map.Entry<Integer, Wishlist> entry : wishlists.entrySet()) {
+            Wishlist w = entry.getValue();
+            if (w.getWishlistTitle() != null &&
+                    w.getWishlistTitle().equals(existingTitle) &&
+                    w.getUserId() == existingUserId) {
+                wishlistId = entry.getKey();
+                break;
+            }
+        }
+
+        assertNotNull(wishlistId, "Kunne ikke finde den eksisterende ønskeliste");
+
+        // Act - Opdater titlen
+        String newTitle = "Opdateret Fødselsdag";
+        Wishlist wishlistToUpdate = new Wishlist();
+        wishlistToUpdate.setWishlistId(wishlistId);
+        wishlistToUpdate.setUserId(existingUserId);
+        wishlistToUpdate.setWishlistTitle(newTitle);
+
+        wishlistRepository.edit(wishlistToUpdate);
+
+        // Assert - Tjek at titlen blev opdateret
+        Wishlist updatedWishlist = wishlistRepository.findById(wishlistId);
+        assertNotNull(updatedWishlist, "Kunne ikke finde ønskelisten efter opdatering");
+        assertEquals(newTitle, updatedWishlist.getWishlistTitle(), "Titlen blev ikke opdateret korrekt");
+        assertEquals(existingUserId, updatedWishlist.getUserId(), "Bruger-ID blev ændret ved opdatering");
     }
 
     @Test
