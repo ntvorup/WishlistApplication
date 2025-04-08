@@ -47,10 +47,39 @@ public class WishlistRepositoryTest {
         assertTrue(found, "Den tilføjede ønskeliste blev ikke fundet i databasen");
     }
 
-    /*
-    @Test
-    public void deleteFromDatabase() {
 
+    @Test
+    public void deleteFromDatabase() throws SQLException {
+        // Arrange
+        int existingUserId = 1;
+        String existingTitle = "Fødselsdag";
+
+        // Find den eksisterende ønskeliste for at få dens ID
+        Map<Integer, Wishlist> wishlists = wishlistRepository.getAllWishlists();
+        Integer wishlistId = null;
+
+        for (Map.Entry<Integer, Wishlist> entry : wishlists.entrySet()) {
+            Wishlist w = entry.getValue();
+            if (w.getWishlistTitle() != null &&
+                    w.getWishlistTitle().equals(existingTitle) &&
+                    w.getUserId() == existingUserId) {
+                wishlistId = entry.getKey();
+                break;
+            }
+        }
+
+        assertNotNull(wishlistId, "Kunne ikke finde den eksisterende ønskeliste");
+
+        // Act - Slet ønskelisten
+        Wishlist wishlistToDelete = new Wishlist();
+        wishlistToDelete.setWishlistId(wishlistId);
+        wishlistRepository.deleteFromDatabase(wishlistToDelete);
+
+        // Assert - Verificer at ønskelisten ikke længere findes i databasen
+        wishlists = wishlistRepository.getAllWishlists();
+        boolean found = wishlists.containsKey(wishlistId);
+
+        assertFalse(found, "Ønskelisten blev ikke slettet fra databasen");
     }
 
     @Test
@@ -89,5 +118,5 @@ public class WishlistRepositoryTest {
     }
 
 
-     */
+
 }
