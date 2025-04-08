@@ -51,4 +51,5 @@ public class WishlistService {
     public Map<Integer, Wish> getWishesByWishlistId(int wishlistId){
         return wishlistRepository.getWishesByWishlistId(wishlistId);
     }
+
 }
