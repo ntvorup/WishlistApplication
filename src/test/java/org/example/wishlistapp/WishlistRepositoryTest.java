@@ -34,13 +34,6 @@ public class WishlistRepositoryTest {
         //Assert
         Map<Integer, Wishlist> wishlists = wishlistRepository.getAllWishlists();
 
-        System.out.println("Antal ønskelister i databasen: " + wishlists.size());
-        for (Map.Entry<Integer, Wishlist> entry : wishlists.entrySet()) {
-            Wishlist w = entry.getValue();
-            System.out.println("Wishlist ID: " + entry.getKey() +
-                    ", Titel: '" + w.getWishlistTitle() + "'" +
-                    ", UserID: " + w.getUserId());
-        }
 
         boolean found = false;
         for (Wishlist wish : wishlists.values()) {
