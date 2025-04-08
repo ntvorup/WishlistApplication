@@ -67,47 +67,4 @@ public class Wishlist {
     public void setListOfWishes(List<Wish> listOfWishes) {
         this.listOfWishes = listOfWishes;
     }
-
-
-    //Metoder til at administrere ønsker
-
-    public Wish getWishById(int wishId) {
-        for (Wish wish : listOfWishes) {
-            if (wish.getWishId() == wishId) {
-                return wish;
-            }
-        }
-        throw new WishNotFoundException(String.valueOf(wishlistId), String.valueOf(wishId));
-    }
-
-    public void addWish(Wish wish) {
-        for (Wish existingWish : listOfWishes) {
-            if (existingWish.getWishId() == wish.getWishId()) {
-                throw new WishAlreadyExistsException("Wish with ID " + wish.getWishId() + " already exists in wishlist");
-            }
-        }
-        listOfWishes.add(wish);
-    }
-
-    // Fjerner et specifikt Wish-objekt fra listen
-    public void removeWish(Wish wish) {
-        if (wish == null) {
-            throw new NullPointerException("Wish cannot be null");
-        }
-
-        boolean removed = listOfWishes.remove(wish);
-        if (!removed) {
-            throw new WishNotFoundException(String.valueOf(wishlistId), String.valueOf(wish.getWishId()));
-        }
-    }
-
-    // Fjerne et ønske udfra dets ID - Kan vi bruge når vi kun kender til ID'et
-    public void removeWish(int wishId) {
-        int initialSize = listOfWishes.size();
-        listOfWishes.removeIf(wish -> wish.getWishId() == wishId);
-
-        if (listOfWishes.size() == initialSize) {
-            throw new WishNotFoundException(String.valueOf(wishlistId), String.valueOf(wishId));
-        }
-    }
 }
