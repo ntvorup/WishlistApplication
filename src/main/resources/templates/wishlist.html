@@ -1,10 +1,64 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <title>Ønskeliste</title>
 </head>
 <body>
+
+<h1>Ønskeliste ID: <span th:text="${wishlistId}">ID</span></h1>
+
+<h2>Ønsker</h2>
+<table border="1">
+    <tr>
+        <th>Titel</th>
+        <th>Pris</th>
+        <th>Beskrivelse</th>
+        <th>Billede</th>
+        <th>Handling</th>
+    </tr>
+    <tr th:each="wish : ${wishes.values()}">
+        <td th:text="${wish.wishTitle}"></td>
+        <td th:text="${wish.wishPrice} + ' kr'">Pris</td>
+        <td th:text="${wish.wishDescription}">Beskrivelse</td>
+        <td>
+            <img th:src="${wish.imageUrl}" alt="Billede" style="width: 100px;"/>
+        </td>
+        <td>
+            <a th:href="@{/wishlist/{wishlistId}/wish/{wishId}(wishlistId=${wishlistId}, wishId=${wish.wishId})}">Se</a> |
+            <a th:href="@{/wishlist/{wishlistId}/wish/{wishId}/edit(wishlistId=${wishlistId}, wishId=${wish.wishId})}">Rediger</a> |
+            <form th:action="@{/wishlist/{wishlistId}/wish/{wishId}/delete(wishlistId=${wishlistId}, wishId=${wish.wishId})}"
+                  method="post" style="display:inline;">
+                <button type="submit" onclick="return confirm('Slet dette ønske?')">Slet</button>
+            </form>
+        </td>
+    </tr>
+</table>
+
+<br>
+
+<h3>Tilføj nyt ønske</h3>
+<form th:action="@{/wishlist/{wishlistId}/wish(wishlistId=${wishlistId})}" method="post">
+    <label>Titel:</label>
+    <input type="text" name="wishTitle" required/><br/>
+
+    <label>Beskrivelse:</label>
+    <input type="text" name="wishDescription"/><br/>
+
+    <label>Pris:</label>
+    <input type="number" step="0.01" name="wishPrice"/><br/>
+
+    <label>URL:</label>
+    <input type="url" name="wishUrl"/><br/>
+
+    <label>Billede-URL:</label>
+    <input type="url" name="wishImageUrl"/><br/>
+
+    <button type="submit">Tilføj Ønske</button>
+</form>
+
+<br>
+<a href="/user">Tilbage til brugeroversigt</a>
 
 </body>
 </html>

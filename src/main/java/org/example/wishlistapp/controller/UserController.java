@@ -61,11 +61,11 @@ public class UserController {
     public String loginWithEmailAndPassword(@RequestParam String email,
                                             @RequestParam String password,
                                             Model model,
-                                            HttpSession session){
+                                            HttpSession session) {
 
         User userLoggedIn = userService.findByEmailAndPassword(email, password);
 
-        if (userLoggedIn != null){
+        if (userLoggedIn != null) {
             session.setAttribute("userId", userLoggedIn.getUserId());
             return "redirect:/user/" + userLoggedIn.getUserId();
         } else {
@@ -75,7 +75,7 @@ public class UserController {
     }
 
     @GetMapping("/register")
-    public String registerWithEmailAndPasswordAdd(Model model){
+    public String registerWithEmailAndPasswordAdd(Model model) {
         User newUser = new User();
 
         model.addAttribute("newUser", newUser);
@@ -96,7 +96,7 @@ public class UserController {
      */
 
     @PostMapping("/registerSave")
-    public String registerWithEmailAndPasswordSave(@ModelAttribute User newUser, Model model, HttpSession session){
+    public String registerWithEmailAndPasswordSave(@ModelAttribute User newUser, Model model, HttpSession session) {
 
         if (!userService.doesEmailExist(newUser.getEmail())) {
             userService.addNewUserToDatabase(newUser);
@@ -114,13 +114,13 @@ public class UserController {
 
 
     @PostMapping("/user/{id}/delete")
-    public String deleteUser(@PathVariable int id){
+    public String deleteUser(@PathVariable int id) {
         userService.deleteFromDatabase(userService.findById(id));
         return "redirect:/";
     }
 
     @GetMapping("/user/{id}/edit")
-    public String editUser(@PathVariable int id, Model model){
+    public String editUser(@PathVariable int id, Model model) {
         User userToEdit = userService.findById(id);
 
         model.addAttribute("userToEdit", userToEdit);
@@ -133,112 +133,27 @@ public class UserController {
                              @RequestParam(value = "lastName", required = false) String newLastName,
                              @RequestParam(value = "email", required = false) String newEmail,
                              @RequestParam(value = "password", required = false) String newPassword,
-                             Model model){
+                             Model model) {
         User user = userService.findById(id);
 
-        if (newFirstName != null && !newFirstName.trim().isEmpty()){
+        if (newFirstName != null && !newFirstName.trim().isEmpty()) {
             user.setFirstName(newFirstName);
         }
-        if (newLastName != null && !newLastName.trim().isEmpty()){
+        if (newLastName != null && !newLastName.trim().isEmpty()) {
             user.setLastName(newLastName);
         }
-        if (newEmail != null && !newEmail.trim().isEmpty()){
+        if (newEmail != null && !newEmail.trim().isEmpty()) {
             user.setEmail(newEmail);
         }
-        if (newPassword != null && !newPassword.trim().isEmpty()){
+        if (newPassword != null && !newPassword.trim().isEmpty()) {
             user.setPassword(newPassword);
         }
 
-        if(userService.editUser(user)){
+        if (userService.editUser(user)) {
             return "redirect:/user/" + user.getUserId();
         } else {
             model.addAttribute("shouldNeverBeHere", "If we arrive here something is not right");
             return "/error";
         }
     }
-
-//    // Get user by id
-//    @GetMapping("/{userId}")
-//    public String findById(@PathVariable int userId, Model model) {
-//        User user = userService.findById(userId);
-//        model.addAttribute("user", user);
-//        return "";
-//    }
-//
-//
-//    // Add a new user
-//    @PostMapping("/add/user")
-//    public String addUserToDatabase(@ModelAttribute User user) {
-//        userService.addToDatabase(user);
-//        return "redirect:/user";
-//    }
-//
-//
-//    // Edit a user
-//    @PostMapping("/edit/user")
-//    public String editUser(@ModelAttribute User user, Model model) {
-//        boolean success = userService.editUser(user);
-//
-//        if (success) {
-//            model.addAttribute("updatedUser", user);
-//            return "userDetail";
-//        } else {
-//            model.addAttribute("error", "Der opstod en fejl ved opdatering af brugeren");
-//            return "editUser";
-//        }
-//    }
-//
-//
-//    // Delete a user
-//    @PostMapping("/delete/user/{userId}")
-//    public String deleteUser(@PathVariable int userId, Model model) {
-//        User userToDelete = userService.findById((userId));
-//
-//        if (userToDelete == null) {
-//            throw new IllegalArgumentException("Ugyldigt input - Brugeren findes ikke");
-//        }
-//
-//        userService.deleteFromDatabase(userToDelete);
-//        model.addAttribute("deletedUser", userToDelete);
-//
-//        return "redirect:/user";
-//    }
-//
-//
-//    // Find user by email
-//    @GetMapping("/by-email")
-//    public String getUserByEmail(@RequestParam String email, Model model) {
-//        try {
-//            User user = userService.findByEmailAndPassword(email);
-//            model.addAttribute("user", user);
-//            return "userDetail";
-//        } catch (Exception e) {
-//            model.addAttribute("error", "Brugeren med denne email findes ikke");
-//            return "userSearchError";
-//            //TODO return to another page please
-//        }
-//    }
-//
-//
-//    // Show add user form
-//    @GetMapping("/add")
-//    public String showAddUsersForm(Model model) {
-//        model.addAttribute("user", new User());
-//        return "addUser";
-//    }
-//
-//
-//    //Show edit user form
-//    @GetMapping("/edit/{userId}")
-//    public String showEditUserForm(@PathVariable int userId, Model model) {
-//        User user = userService.findById(userId);
-//
-//        if (user == null) {
-//            throw new IllegalArgumentException("Ugyldigt input - Brugeren findes ikke");
-//        }
-//
-//        model.addAttribute("user", user);
-//        return "editUser";
-//    }
-
 }

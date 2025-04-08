@@ -16,12 +16,12 @@
     </a>
 
     <!-- Hvis der ikke er nogen ønskelister -->
-    <div th:if="${#lists.isEmpty(currentUser.wishlists)}" style="margin: 20px; font-style: italic;">
-        Skal du ikke have en liste?
+    <div th:if="${#lists.isEmpty(wishlists)}" style="margin: 20px; font-style: italic;">
+        Skal du ikke have en ønskeliste?
     </div>
 
     <!-- Eksisterende ønskelister -->
-    <div class="wishlist-card" th:each="wishlist : ${currentUser.wishlists}" th:unless="${#lists.isEmpty(currentUser.wishlists)}">
+    <div class="wishlist-card" th:each="wishlist : ${wishlists}" th:unless="${#lists.isEmpty(wishlists)}">
         <a th:href="@{/wishlist/{id}(id=${wishlist.wishlistId})}">
             <div th:with="latestWish=${#lists.isEmpty(wishlist.listOfWishes) ? null : wishlist.listOfWishes[wishlist.listOfWishes.size() - 1]}">
                 <img th:src="${latestWish == null || latestWish.imageURL == null ? '/images/ønske.png' : latestWish.imageURL}"
