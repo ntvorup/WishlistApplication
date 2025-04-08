@@ -1,8 +1,5 @@
 package org.example.wishlistapp.model;
 
-import org.example.wishlistapp.exceptions.wishlist.WishAlreadyExistsException;
-import org.example.wishlistapp.exceptions.wishlist.WishNotFoundException;
-
 import java.util.ArrayList;
 import java.util.List;
 
