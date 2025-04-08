@@ -1,20 +1,24 @@
 package org.example.wishlistapp;
 
+import org.example.wishlistapp.model.Wish;
 import org.example.wishlistapp.model.Wishlist;
 import org.example.wishlistapp.repository.WishlistRepository;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.jdbc.Sql;
+
 import static org.junit.jupiter.api.Assertions.*;
 
+import java.math.BigDecimal;
 import java.sql.SQLException;
 import java.util.Map;
 
 
 @SpringBootTest
-
 @Sql(scripts = "classpath:h2init.sql", executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
+@DirtiesContext(classMode = DirtiesContext.ClassMode.BEFORE_EACH_TEST_METHOD)
 
 public class WishlistRepositoryTest {
 
@@ -83,7 +87,7 @@ public class WishlistRepositoryTest {
     }
 
     @Test
-    public void findById() {
+    public void findById() throws SQLException {
         // Arrange
         int existingUserId = 1;
         String existingTitle = "Fødselsdag";
@@ -152,13 +156,70 @@ public class WishlistRepositoryTest {
     }
 
     @Test
-    public void getAllWishlists() {
+    public void getAllWishlists() throws SQLException {
+        // Act
+        Map<Integer, Wishlist> wishlists = wishlistRepository.getAllWishlists();
 
+        // Assert
+        assertNotNull(wishlists, "getAllWishlists returnerede null");
+        assertFalse(wishlists.isEmpty(), "Ingen ønskelister blev fundet");
+
+        // Vi forventer mindst 6 ønskelister baseret på h2init.sql
+        assertTrue(wishlists.size() >= 6, "Forventede mindst 6 ønskelister, men fandt " + wishlists.size());
+
+        // Test at vi kan få adgang til specifikke ønskelister i map'et
+        boolean foundFødselsdag = false;
+        boolean foundJul = false;
+
+        for (Wishlist wishlist : wishlists.values()) {
+            if (wishlist.getWishlistTitle() != null) {
+                if (wishlist.getWishlistTitle().equals("Fødselsdag")) {
+                    foundFødselsdag = true;
+                } else if (wishlist.getWishlistTitle().equals("Jul")) {
+                    foundJul = true;
+                }
+            }
+        }
+
+        assertTrue(foundFødselsdag, "Kunne ikke finde ønskelisten 'Fødselsdag'");
+        assertTrue(foundJul, "Kunne ikke finde ønskelisten 'Jul'");
     }
 
     @Test
-    public void addWishToWishlist() {
+    public void addWishToWishlist() throws SQLException {
+        // Arrange
+        int wishlistId = 1;
 
+        // Opret et nyt ønske
+        Wish newWish = new Wish();
+        newWish.setWishTitle("Nyt testønske");
+        newWish.setWishDescription("Dette er et testønske");
+        newWish.setWishPrice(new BigDecimal("199.95"));
+        newWish.setProductUrl("https://example.com/test");
+        newWish.setImageUrl("https://example.com/image.jpg");
+
+        // Act
+        wishlistRepository.addWishToWishlist(newWish, wishlistId);
+
+        // Assert
+        Map<Integer, Wish> wishes = wishlistRepository.getWishesByWishlistId(wishlistId);
+        assertNotNull(wishes, "Kunne ikke hente ønsker efter tilføjelse");
+        assertFalse(wishes.isEmpty(), "Ingen ønsker blev fundet efter tilføjelse");
+
+
+        boolean found = false;
+        for (Wish wish : wishes.values()) {
+            if (wish.getWishTitle() != null && wish.getWishTitle().equals("Nyt testønske")) {
+                found = true;
+                break;
+            }
+        }
+
+        if (!found) {
+            System.out.println("WARNING: Could not find wish with title 'Nyt testønske'");
+        }
+
+        assertTrue(found, "Det tilføjede ønske blev ikke fundet");
     }
 
     @Test
