@@ -61,7 +61,7 @@ public class UserController {
         User newUser = new User();
 
         model.addAttribute("newUser", newUser);
-        return "/user";
+        return "user";
     }
 
     @PostMapping("/registerSave")
@@ -122,7 +122,7 @@ public class UserController {
             return "redirect:/user/" + user.getUserId();
         } else {
             model.addAttribute("shouldNeverBeHere", "If we arrive here something is not right");
-            return "/error";
+            return "error";
         }
     }
 }
