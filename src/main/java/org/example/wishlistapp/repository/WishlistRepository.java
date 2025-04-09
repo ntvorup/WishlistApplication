@@ -69,7 +69,7 @@ public class WishlistRepository extends Repository<Wishlist> {
     }
 
     public List<Wishlist> getAllWishlistsById(int id) {
-        String sql = "SELECT wishlist_id, user_id, title AS wishlistTitle FROM wishlists";
+        String sql = "SELECT wishlist_id, user_id, title AS wishlistTitle FROM wishlists WHERE user_id = ?";
         return jdbcTemplate.query(sql, BeanPropertyRowMapper.newInstance(Wishlist.class), id);
     }
 

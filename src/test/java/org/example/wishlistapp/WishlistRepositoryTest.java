@@ -13,6 +13,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 import java.math.BigDecimal;
 import java.sql.SQLException;
+import java.util.List;
 import java.util.Map;
 
 
@@ -36,11 +37,11 @@ public class WishlistRepositoryTest {
         wishlistRepository.addToDatabase(wishlist);
 
         //Assert
-        Map<Integer, Wishlist> wishlists = wishlistRepository.getAllWishlists();
+        List<Wishlist> wishlists = wishlistRepository.getAllWishlistsById(wishlist.getUserId());
 
 
         boolean found = false;
-        for (Wishlist wish : wishlists.values()) {
+        for (Wishlist wish : wishlists) {
             if (wish.getWishlistTitle() != null &&
                     wish.getWishlistTitle().equals("Test Ønskeliste") &&
                     wish.getUserId() == 1) {
@@ -59,15 +60,14 @@ public class WishlistRepositoryTest {
         String existingTitle = "Fødselsdag";
 
         // Find den eksisterende ønskeliste for at få dens ID
-        Map<Integer, Wishlist> wishlists = wishlistRepository.getAllWishlists();
+        List<Wishlist> wishlists = wishlistRepository.getAllWishlistsById(existingUserId);
         Integer wishlistId = null;
 
-        for (Map.Entry<Integer, Wishlist> entry : wishlists.entrySet()) {
-            Wishlist w = entry.getValue();
+        for (Wishlist w : wishlists) {
             if (w.getWishlistTitle() != null &&
                     w.getWishlistTitle().equals(existingTitle) &&
                     w.getUserId() == existingUserId) {
-                wishlistId = entry.getKey();
+                wishlistId = w.getWishlistId();
                 break;
             }
         }
@@ -80,11 +80,18 @@ public class WishlistRepositoryTest {
         wishlistRepository.deleteFromDatabase(wishlistToDelete);
 
         // Assert - Verificer at ønskelisten ikke længere findes i databasen
-        wishlists = wishlistRepository.getAllWishlists();
-        boolean found = wishlists.containsKey(wishlistId);
+        wishlists = wishlistRepository.getAllWishlistsById(existingUserId);
+        boolean found = false;
+        for (Wishlist w : wishlists) {
+            if (wishlistId.equals(w.getWishlistId())) {
+                found = true;
+                break;
+            }
+        }
 
         assertFalse(found, "Ønskelisten blev ikke slettet fra databasen");
     }
+
 
     @Test
     public void findById() throws SQLException {
@@ -93,30 +100,30 @@ public class WishlistRepositoryTest {
         String existingTitle = "Fødselsdag";
 
         // Find den eksisterende ønskeliste for at få dens ID
-        Map<Integer, Wishlist> wishlists = wishlistRepository.getAllWishlists();
+        List<Wishlist> wishlists = wishlistRepository.getAllWishlistsById(existingUserId);
         Integer wishlistId = null;
 
-        for (Map.Entry<Integer, Wishlist> entry : wishlists.entrySet()) {
-            Wishlist w = entry.getValue();
+        for (Wishlist w : wishlists) {
             if (w.getWishlistTitle() != null &&
                     w.getWishlistTitle().equals(existingTitle) &&
                     w.getUserId() == existingUserId) {
-                wishlistId = entry.getKey();
+                wishlistId = w.getWishlistId();
                 break;
             }
         }
 
         assertNotNull(wishlistId, "Kunne ikke finde den eksisterende ønskeliste");
 
-        //Act
+        // Act
         Wishlist foundWishlist = wishlistRepository.findById(wishlistId);
 
-        //Assert
+        // Assert
         assertNotNull(foundWishlist, "Ønskelisten blev ikke fundet");
         assertEquals(existingTitle, foundWishlist.getWishlistTitle(), "Ønskelistens titel matcher ikke");
         assertEquals(existingUserId, foundWishlist.getUserId(), "Ønskelistens bruger-ID matcher ikke");
         assertEquals(wishlistId, foundWishlist.getWishlistId(), "Ønskelistens ID matcher ikke");
     }
+
 
     @Test
     public void edit() throws SQLException {
@@ -124,15 +131,14 @@ public class WishlistRepositoryTest {
         int existingUserId = 1;
         String existingTitle = "Fødselsdag";
 
-        Map<Integer, Wishlist> wishlists = wishlistRepository.getAllWishlists();
+        List<Wishlist> wishlists = wishlistRepository.getAllWishlistsById(existingUserId);
         Integer wishlistId = null;
 
-        for (Map.Entry<Integer, Wishlist> entry : wishlists.entrySet()) {
-            Wishlist w = entry.getValue();
+        for (Wishlist w : wishlists) {
             if (w.getWishlistTitle() != null &&
                     w.getWishlistTitle().equals(existingTitle) &&
                     w.getUserId() == existingUserId) {
-                wishlistId = entry.getKey();
+                wishlistId = w.getWishlistId();
                 break;
             }
         }
@@ -155,35 +161,6 @@ public class WishlistRepositoryTest {
         assertEquals(existingUserId, updatedWishlist.getUserId(), "Bruger-ID blev ændret ved opdatering");
     }
 
-    @Test
-    public void getAllWishlists() throws SQLException {
-        // Act
-        Map<Integer, Wishlist> wishlists = wishlistRepository.getAllWishlists();
-
-        // Assert
-        assertNotNull(wishlists, "getAllWishlists returnerede null");
-        assertFalse(wishlists.isEmpty(), "Ingen ønskelister blev fundet");
-
-        // Vi forventer mindst 6 ønskelister
-        assertTrue(wishlists.size() >= 6, "Forventede mindst 6 ønskelister, men fandt " + wishlists.size());
-
-        // Test at vi kan få adgang til specifikke ønskelister i map'et
-        boolean foundFødselsdag = false;
-        boolean foundJul = false;
-
-        for (Wishlist wishlist : wishlists.values()) {
-            if (wishlist.getWishlistTitle() != null) {
-                if (wishlist.getWishlistTitle().equals("Fødselsdag")) {
-                    foundFødselsdag = true;
-                } else if (wishlist.getWishlistTitle().equals("Jul")) {
-                    foundJul = true;
-                }
-            }
-        }
-
-        assertTrue(foundFødselsdag, "Kunne ikke finde ønskelisten 'Fødselsdag'");
-        assertTrue(foundJul, "Kunne ikke finde ønskelisten 'Jul'");
-    }
 
     @Test
     public void addWishToWishlist() throws SQLException {
