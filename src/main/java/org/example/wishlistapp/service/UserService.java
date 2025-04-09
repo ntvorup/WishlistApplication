@@ -27,10 +27,6 @@ public class UserService {
         return userRepository.findById(id);
     }
 
-//    public List<User> getAllUsers(){
-//        return userRepository.getAll();
-//    }
-
     public Boolean editUser(User newUser){
         return userRepository.edit(newUser);
     }

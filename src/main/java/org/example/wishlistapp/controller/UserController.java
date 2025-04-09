@@ -64,19 +64,6 @@ public class UserController {
         return "/user";
     }
 
-    /*@PostMapping("/registerSave")
-    public String registerWithEmailAndPasswordSave(@ModelAttribute User newUser, Model model, HttpSession session){
-
-        if(!userService.doesEmailExist(newUser.getEmail())){
-            userService.addNewUserToDatabase(newUser);
-            return loginWithEmailAndPassword(newUser.getEmail(), newUser.getPassword(), model, session);
-        } else {
-            model.addAttribute("alreadyExist", "Email is already registered");
-            return "redirect:/user";
-        }
-    }
-     */
-
     @PostMapping("/registerSave")
     public String registerWithEmailAndPasswordSave(@ModelAttribute User newUser, Model model, HttpSession session) {
 
