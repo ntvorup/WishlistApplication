@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Velkommen</title>
+    <link rel="stylesheet" th:href="@{/css/index.css}"/>
+</head>
+<body>
+
+<!-- Skjulte checkboxes til at toggle modals -->
+<input type="checkbox" id="showLogin" hidden>
+<input type="checkbox" id="showRegister" hidden>
+
+<header class="header">
+    <div class="header-content" style="display: flex; justify-content: space-between; align-items: center;">
+        <h2>ØnskR</h2>
+        <div>
+            <label for="showLogin" class="header-button">Login</label>
+            <label for="showRegister" class="header-button">Opret bruger</label>
+        </div>
+    </div>
+</header>
+
+<div class="center-content">
+    <h1 style="animation: fadeIn 2s ease-in-out;">Gør det nemt at ønske – <em>og at give</em></h1>
+    <p style="animation: fadeIn 3.5s ease-in-out;">Fordi det er rart at give det rigtige</p>
+    <label for="showRegister" class="button"
+           style="animation: fadeIn 3s ease-in-out;">Kom i gang</label>
+</div>
+
+<!-- Login Modal -->
+<div class="modal" id="loginModal">
+    <label for="showLogin" class="overlay"></label>
+    <div class="modal-content">
+        <label for="showLogin" class="close">&times;</label>
+        <form th:action="@{/login}" method="post">
+            <input type="text" name="email" placeholder="Email" required>
+            <input type="password" name="password" placeholder="Adgangskode" required>
+            <button type="submit">Login</button>
+        </form>
+        <p>Har du ikke en bruger? <label for="showRegister" class="link-like">Opret dig her</label></p>
+    </div>
+</div>
+
+<!-- Register Modal -->
+<div class="modal" id="registerModal">
+    <label for="showRegister" class="overlay"></label>
+    <div class="modal-content">
+        <label for="showRegister" class="close">&times;</label>
+        <form th:action="@{/registerSave}" th:object="${newUser}" method="post">
+            <label for="firstName">Fornavn:</label>
+            <input type="text" id="firstName" th:field="*{firstName}" required/><br/>
+
+            <label for="lastName">Efternavn:</label>
+            <input type="text" id="lastName" th:field="*{lastName}" required/><br/>
+
+            <label for="email">Email:</label>
+            <input type="email" id="email" th:field="*{email}" required/><br/>
+
+            <label for="password">Adgangskode:</label>
+            <input type="password" id="password" th:field="*{password}" required/><br/>
+
+            <button type="submit">Opret bruger</button>
+        </form>
+        <p>Har du allerede en bruger? <label for="showLogin" class="link-like">Log ind her</label></p>
+    </div>
+</div>
+
+<footer class="footer">
+    <p>ØnskR Inc</p>
+</footer>
+
+</body>
+</html>

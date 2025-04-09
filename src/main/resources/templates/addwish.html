@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>Tilføj Ønske</title>
+  <link rel="stylesheet" href="/css/user.css">
+  <style>
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background-color: #f4f4f7;
+      margin: 0;
+      padding: 40px 20px;
+      color: #333;
+    }
+
+    h1 {
+      text-align: center;
+      font-size: 28px;
+      color: #222;
+      margin-bottom: 30px;
+    }
+
+    form {
+      background-color: #fff;
+      max-width: 600px;
+      margin: auto;
+      padding: 30px;
+      border-radius: 12px;
+      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
+      display: flex;
+      flex-direction: column;
+      gap: 18px;
+    }
+
+    label {
+      font-weight: 600;
+      margin-bottom: 6px;
+      color: #444;
+    }
+
+    input[type="text"],
+    input[type="number"],
+    input[type="url"],
+    textarea {
+      padding: 10px 12px;
+      border: 1px solid #ccc;
+      border-radius: 8px;
+      font-size: 16px;
+      width: 100%;
+      transition: border 0.2s ease;
+      background-color: #fafafa;
+    }
+
+    input:focus,
+    textarea:focus {
+      border-color: #0077cc;
+      outline: none;
+      background-color: #fff;
+    }
+
+    textarea {
+      resize: vertical;
+      min-height: 80px;
+    }
+
+    button[type="submit"] {
+      background-color: #0077cc;
+      color: #fff;
+      font-size: 16px;
+      font-weight: 600;
+      padding: 12px 20px;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: background-color 0.2s ease;
+    }
+
+    button[type="submit"]:hover {
+      background-color: #005fa3;
+    }
+
+    a {
+      display: block;
+      text-align: center;
+      margin-top: 30px;
+      color: #0077cc;
+      text-decoration: none;
+      font-size: 16px;
+    }
+
+    a:hover {
+      text-decoration: underline;
+      color: #005fa3;
+    }
+
+  </style>
+</head>
+<body>
+
+<h1>Tilføj et nyt Ønske</h1>
+
+<!-- Formularen poster til: /wishlist/{wishlistId}/wish -->
+<form th:action="@{'/wishlist/' + ${wishlistId} + '/wish'}" method="post" th:object="${wish}">
+  <label for="wishTitle">Titel:</label>
+  <input type="text" id="wishTitle" name="wishTitle" required>
+
+  <label for="wishDescription">Beskrivelse:</label>
+  <textarea id="wishDescription" name="wishDescription"></textarea>
+
+  <label for="wishPrice">Pris:</label>
+  <input type="number" id="wishPrice" name="wishPrice" step="0.01">
+
+  <label for="wishUrl">Produktlink:</label>
+  <input type="url" id="wishUrl" name="wishUrl">
+
+  <label for="wishImageUrl">Billedlink:</label>
+  <input type="url" id="wishImageUrl" name="wishImageUrl">
+
+  <button type="submit">Tilføj Ønske</button>
+</form>
+
+<a th:href="@{'/wishlist/wishlist/' + ${wishlistId}}">Tilbage til ønskelisten</a>
+
+</body>
+</html>

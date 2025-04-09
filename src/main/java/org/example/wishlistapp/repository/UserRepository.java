@@ -21,7 +21,7 @@ public class UserRepository extends Repository<User>{
     @Override
     @Transactional
     public void addToDatabase(User newUserToAdd) {
-        String sql = "INSERT INTO users (first_name, last_name, email, password) VALUES (?,?,?,?,?)";
+        String sql = "INSERT INTO users (first_name, last_name, email, password) VALUES (?,?,?,?)";
         jdbcTemplate.update(sql,
                 newUserToAdd.getFirstName(),
                 newUserToAdd.getLastName(),
@@ -34,7 +34,7 @@ public class UserRepository extends Repository<User>{
     public void deleteFromDatabase(User userToDelete) {
         String sql = "DELETE FROM users WHERE user_id = ?";
 
-        jdbcTemplate.update(sql, userToDelete.getUserID());
+        jdbcTemplate.update(sql, userToDelete.getUserId());
     }
 
     @Override
@@ -67,15 +67,21 @@ public class UserRepository extends Repository<User>{
                     newUser.getLastName(),
                     newUser.getEmail(),
                     newUser.getPassword(),
-                    newUser.getUserID()) == 1;
+                    newUser.getUserId()) == 1;
         } catch (DataAccessException e){
             return false;
         }
     }
 
     @Transactional
-    public User findByEmail(String email){
-        String sql = "SELECT * FROM users WHERE email = ?";
-        return jdbcTemplate.queryForObject(sql, BeanPropertyRowMapper.newInstance(User.class), email);
+    public User findByEmailAndPassword(String email, String password){
+        String sql = "SELECT * FROM users WHERE email = ? AND password = ?";
+        return jdbcTemplate.queryForObject(sql, BeanPropertyRowMapper.newInstance(User.class), email, password);
+    }
+
+    public Boolean doesEmailExist(String email){
+        String sql = "SELECT COUNT(*) FROM users WHERE email = ?";
+        Integer count = jdbcTemplate.queryForObject(sql, Integer.class, email);
+        return count != null && count > 0;
     }
 }

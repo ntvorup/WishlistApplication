@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Ønskeliste oversigt</title>
+    <link rel="stylesheet" th:href="@{/css/user.css}"/>
+</head>
+<body>
+
+<h2 style="margin-left: 20px;">Mine ønskelister</h2>
+
+<div class="wishlist-grid">
+    <!-- Opret ønskeliste kort -->
+    <div class="wishlist-card add-new">
+        <a th:href="@{/wishlist/addWishlist}">
+            <div class="wishlist-content">
+                <div class="wishlist-title">➕ Opret Ønskeliste</div>
+            </div>
+        </a>
+    </div>
+
+    <!-- Ønskelister -->
+    <div class="wishlist-card-wrapper" th:each="wishlist : ${wishlists}">
+
+        <!-- Slet-knap -->
+        <form th:action="@{/wishlist/wishlist/{id}/delete(id=${wishlist.wishlistId})}"
+              method="post"
+              class="delete-form"
+              onsubmit="return confirm('Er du sikker på, at du vil slette ønskelisten?');">
+            <button type="submit" class="delete-btn">×</button>
+        </form>
+
+        <!-- Klikbart ønskelistekort -->
+        <a th:href="@{/wishlist/wishlist/{id}(id=${wishlist.wishlistId})}">
+            <div class="wishlist-card">
+                <div class="wishlist-content">
+                    <img th:src="@{/images/wish.png}" alt="Present" class="wishlist-image"/>
+                    <div class="wishlist-title" th:text="${wishlist.wishlistTitle}">Fallback titel</div>
+                </div>
+            </div>
+        </a>
+    </div>
+
+</div>
+
+</body>
+
+</html>

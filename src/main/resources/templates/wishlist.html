@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="da" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Ønsker</title>
+    <link rel="stylesheet" th:href="@{/css/wishlist.css}"/>
+</head>
+<body>
+
+<h2 style="margin-left: 20px;">Ønsker</h2>
+
+<div style="margin-left: 20px; margin-bottom: 20px;">
+    <a th:href="@{'/wishlist/user/' + ${session.userId}}" class="back-button">← Tilbage til oversigt</a>
+</div>
+
+<div class="wishlist-grid">
+    <!-- Tilføj nyt ønske -->
+    <div class="wishlist-card add-new">
+        <a th:href="@{'/wishlist/wishlist/' + ${wishlistId} + '/addWish'}">
+            <div class="add-text">➕ Tilføj Ønske</div>
+        </a>
+    </div>
+
+    <!-- Ønske-kort med slet-knap -->
+    <div th:each="wish : ${wishes.values()}" class="wishlist-card-wrapper">
+
+        <!-- Slet-knap -->
+        <form th:action="@{'/wishlist/wishlist/' + ${wishlistId} + '/wish/' + ${wish.wishId} + '/delete'}"
+              method="post" class="delete-form"
+              onsubmit="return confirm('Er du sikker på, at du vil slette dette ønske?');">
+            <button type="submit" class="delete-btn">×</button>
+        </form>
+
+        <!-- Klikbart kort -->
+        <a th:href="@{'/wishlist/wishlist/' + ${wishlistId} + '/wish/' + ${wish.wishId}}"
+           class="wishlist-card"
+           style="text-decoration: none; color: inherit; display: block;">
+
+            <div class="wishlist-title" th:text="${wish.wishTitle}">Titel</div>
+
+            <div>
+                <span th:if="${wish.wishPrice != null}" th:text="${wish.wishPrice + ' kr'}">Pris</span>
+                <span th:if="${wish.wishPrice == null}">Pris ikke angivet</span>
+            </div>
+        </a>
+    </div>
+</div>
+
+</body>
+</html>
