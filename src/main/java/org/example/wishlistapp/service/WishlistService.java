@@ -4,9 +4,10 @@ import org.example.wishlistapp.model.Wish;
 import org.example.wishlistapp.model.Wishlist;
 import org.example.wishlistapp.repository.UserRepository;
 import org.example.wishlistapp.repository.WishlistRepository;
+import org.springframework.stereotype.Service;
 
 import java.util.Map;
-
+@Service
 public class WishlistService {
     private WishlistRepository wishlistRepository;
 

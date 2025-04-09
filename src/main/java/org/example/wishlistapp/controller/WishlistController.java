@@ -62,7 +62,7 @@ public class WishlistController {
         }
     }
 
-
+/*
     //TODO How the fuck do I get the right wishlist to delete?!
     // Delete a wishlist
     @PostMapping("/delete/wishlist/{wishlistId}")
@@ -76,6 +76,10 @@ public class WishlistController {
 
         return "redirect:/wishlist";
     }
+
+
+
+ */
 
 //-----------------------------------  Wishes  ----------------------------------------------------
 
