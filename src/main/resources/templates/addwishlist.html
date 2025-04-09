@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Opret Ønskeliste</title>
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+
+<h1>Opret en ny Ønskeliste</h1>
+
+<form th:action="@{/wishlist/saveWishlist}" method="post" th:object="${newWishlist}">
+    <label for="wishlistTitle">Titel på ønskeliste:</label>
+    <input type="text" id="wishlistTitle" name="wishlistTitle" required><br><br>
+
+    <button type="submit">Gem Ønskeliste</button>
+</form>
+
+<a href="/user" th:href="@{'/wishlist/user/' + ${session.userId}}">Tilbage til dine ønskelister</a>
+
+</body>
+</html>

@@ -19,22 +19,11 @@ public class UserController {
         this.userService = userService;
     }
 
+
     @GetMapping("/")
     public String index(Model model) {
         model.addAttribute("newUser", new User());
         return "index"; //
-    }
-
-    @GetMapping("/user")
-    public String showUserPage(HttpSession session, Model model) {
-        Integer userId = (Integer) session.getAttribute("userId");
-        if (userId == null) {
-            return "redirect:/";
-        }
-
-        User user = userService.findById(userId);
-        model.addAttribute("currentUser", user);
-        return "user";
     }
 
     @GetMapping("/user/{id}")
@@ -50,13 +39,6 @@ public class UserController {
         return "user";
     }
 
-    // Get all users
-//    @GetMapping("")
-//    public String getAllUsers(Model model) {
-//        model.addAttribute("users", userService.getAllUsers());
-//        return "";
-//    }
-
     @PostMapping("/login")
     public String loginWithEmailAndPassword(@RequestParam String email,
                                             @RequestParam String password,
@@ -67,7 +49,7 @@ public class UserController {
 
         if (userLoggedIn != null) {
             session.setAttribute("userId", userLoggedIn.getUserId());
-            return "redirect:/user/" + userLoggedIn.getUserId();
+            return "redirect:/wishlist/user/" + userLoggedIn.getUserId();
         } else {
             model.addAttribute("error", "Invalid email or password");
             return "index";

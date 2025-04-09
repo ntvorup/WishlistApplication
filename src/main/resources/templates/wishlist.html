@@ -1,64 +1,50 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html lang="da" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>Ønskeliste</title>
+    <title>Ønsker</title>
+    <link rel="stylesheet" th:href="@{/css/wishlist.css}"/>
 </head>
 <body>
 
-<h1>Ønskeliste ID: <span th:text="${wishlistId}">ID</span></h1>
+<h2 style="margin-left: 20px;">Ønsker</h2>
 
-<h2>Ønsker</h2>
-<table border="1">
-    <tr>
-        <th>Titel</th>
-        <th>Pris</th>
-        <th>Beskrivelse</th>
-        <th>Billede</th>
-        <th>Handling</th>
-    </tr>
-    <tr th:each="wish : ${wishes.values()}">
-        <td th:text="${wish.wishTitle}"></td>
-        <td th:text="${wish.wishPrice} + ' kr'">Pris</td>
-        <td th:text="${wish.wishDescription}">Beskrivelse</td>
-        <td>
-            <img th:src="${wish.imageUrl}" alt="Billede" style="width: 100px;"/>
-        </td>
-        <td>
-            <a th:href="@{/wishlist/{wishlistId}/wish/{wishId}(wishlistId=${wishlistId}, wishId=${wish.wishId})}">Se</a> |
-            <a th:href="@{/wishlist/{wishlistId}/wish/{wishId}/edit(wishlistId=${wishlistId}, wishId=${wish.wishId})}">Rediger</a> |
-            <form th:action="@{/wishlist/{wishlistId}/wish/{wishId}/delete(wishlistId=${wishlistId}, wishId=${wish.wishId})}"
-                  method="post" style="display:inline;">
-                <button type="submit" onclick="return confirm('Slet dette ønske?')">Slet</button>
-            </form>
-        </td>
-    </tr>
-</table>
+<div style="margin-left: 20px; margin-bottom: 20px;">
+    <a th:href="@{'/wishlist/user/' + ${session.userId}}" class="back-button">← Tilbage til oversigt</a>
+</div>
 
-<br>
+<div class="wishlist-grid">
+    <!-- Tilføj nyt ønske -->
+    <div class="wishlist-card add-new">
+        <a th:href="@{'/wishlist/wishlist/' + ${wishlistId} + '/addWish'}">
+            <div class="add-text">➕ Tilføj Ønske</div>
+        </a>
+    </div>
 
-<h3>Tilføj nyt ønske</h3>
-<form th:action="@{/wishlist/{wishlistId}/wish(wishlistId=${wishlistId})}" method="post">
-    <label>Titel:</label>
-    <input type="text" name="wishTitle" required/><br/>
+    <!-- Ønske-kort med slet-knap -->
+    <div th:each="wish : ${wishes.values()}" class="wishlist-card-wrapper">
 
-    <label>Beskrivelse:</label>
-    <input type="text" name="wishDescription"/><br/>
+        <!-- Slet-knap -->
+        <form th:action="@{'/wishlist/wishlist/' + ${wishlistId} + '/wish/' + ${wish.wishId} + '/delete'}"
+              method="post" class="delete-form"
+              onsubmit="return confirm('Er du sikker på, at du vil slette dette ønske?');">
+            <button type="submit" class="delete-btn">×</button>
+        </form>
 
-    <label>Pris:</label>
-    <input type="number" step="0.01" name="wishPrice"/><br/>
+        <!-- Klikbart kort -->
+        <a th:href="@{'/wishlist/wishlist/' + ${wishlistId} + '/wish/' + ${wish.wishId}}"
+           class="wishlist-card"
+           style="text-decoration: none; color: inherit; display: block;">
 
-    <label>URL:</label>
-    <input type="url" name="wishUrl"/><br/>
+            <div class="wishlist-title" th:text="${wish.wishTitle}">Titel</div>
 
-    <label>Billede-URL:</label>
-    <input type="url" name="wishImageUrl"/><br/>
-
-    <button type="submit">Tilføj Ønske</button>
-</form>
-
-<br>
-<a href="/user">Tilbage til brugeroversigt</a>
+            <div>
+                <span th:if="${wish.wishPrice != null}" th:text="${wish.wishPrice + ' kr'}">Pris</span>
+                <span th:if="${wish.wishPrice == null}">Pris ikke angivet</span>
+            </div>
+        </a>
+    </div>
+</div>
 
 </body>
 </html>

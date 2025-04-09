@@ -3,35 +3,46 @@
 <head>
     <meta charset="UTF-8">
     <title>Ønskeliste oversigt</title>
-    <link rel="stylesheet" th:href="@{/user.css}"/>
+    <link rel="stylesheet" th:href="@{/css/user.css}"/>
 </head>
 <body>
 
 <h2 style="margin-left: 20px;">Mine ønskelister</h2>
 
 <div class="wishlist-grid">
-    <!-- Opret Ønskeliste -->
-    <a th:href="@{/wishlist/create}" class="wishlist-card add-new">
-        <div>OPRET ØNSKELISTE</div>
-    </a>
-
-    <!-- Hvis der ikke er nogen ønskelister -->
-    <div th:if="${#lists.isEmpty(wishlists)}" style="margin: 20px; font-style: italic;">
-        Skal du ikke have en ønskeliste?
-    </div>
-
-    <!-- Eksisterende ønskelister -->
-    <div class="wishlist-card" th:each="wishlist : ${wishlists}" th:unless="${#lists.isEmpty(wishlists)}">
-        <a th:href="@{/wishlist/{id}(id=${wishlist.wishlistId})}">
-            <div th:with="latestWish=${#lists.isEmpty(wishlist.listOfWishes) ? null : wishlist.listOfWishes[wishlist.listOfWishes.size() - 1]}">
-                <img th:src="${latestWish == null || latestWish.imageURL == null ? '/images/ønske.png' : latestWish.imageURL}"
-                     alt="Billede for [[${wishlist.wishlistTitle}]]"
-                     style="width: 100%; height: auto; border-radius: 12px;"/>
+    <!-- Opret ønskeliste kort -->
+    <div class="wishlist-card add-new">
+        <a th:href="@{/wishlist/addWishlist}">
+            <div class="wishlist-content">
+                <div class="wishlist-title">➕ Opret Ønskeliste</div>
             </div>
-            <div class="wishlist-title" th:text="${wishlist.wishlistTitle}"></div>
         </a>
     </div>
+
+    <!-- Ønskelister -->
+    <div class="wishlist-card-wrapper" th:each="wishlist : ${wishlists}">
+
+        <!-- Slet-knap -->
+        <form th:action="@{/wishlist/wishlist/{id}/delete(id=${wishlist.wishlistId})}"
+              method="post"
+              class="delete-form"
+              onsubmit="return confirm('Er du sikker på, at du vil slette ønskelisten?');">
+            <button type="submit" class="delete-btn">×</button>
+        </form>
+
+        <!-- Klikbart ønskelistekort -->
+        <a th:href="@{/wishlist/wishlist/{id}(id=${wishlist.wishlistId})}">
+            <div class="wishlist-card">
+                <div class="wishlist-content">
+                    <img th:src="@{/images/wish.png}" alt="Present" class="wishlist-image"/>
+                    <div class="wishlist-title" th:text="${wishlist.wishlistTitle}">Fallback titel</div>
+                </div>
+            </div>
+        </a>
+    </div>
+
 </div>
 
 </body>
+
 </html>

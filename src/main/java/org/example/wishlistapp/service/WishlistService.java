@@ -6,6 +6,7 @@ import org.example.wishlistapp.repository.UserRepository;
 import org.example.wishlistapp.repository.WishlistRepository;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Map;
 
 @Service
@@ -32,7 +33,7 @@ public class WishlistService {
         return wishlistRepository.edit(newWishlist);
     }
 
-    public Map<Integer, Wishlist> getAllWishlistsById(int id){
+    public List<Wishlist> getAllWishlistsById(int id){
         return wishlistRepository.getAllWishlistsById(id);
     }
 

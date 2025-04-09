@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Rediger Ønske</title>
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+
+<h1>Rediger Ønske</h1>
+
+<form th:action="@{'/wishlist/' + ${wish.wishlistId} + '/wish/' + ${wish.wishId} + '/edit'}" method="post">
+    <label for="wishTitle">Titel:</label>
+    <input type="text" id="wishTitle" name="wishTitle" th:value="${wish.wishTitle}" required><br><br>
+
+    <label for="wishDescription">Beskrivelse:</label><br>
+    <textarea id="wishDescription" name="wishDescription" rows="4" cols="50"
+              th:text="${wish.wishDescription}"></textarea><br><br>
+
+    <label for="wishPrice">Pris (DKK):</label>
+    <input type="number" id="wishPrice" name="wishPrice" step="0.01"
+           th:value="${wish.wishPrice}"><br><br>
+
+    <label for="wishUrl">Produkt URL:</label>
+    <input type="url" id="wishUrl" name="wishUrl" th:value="${wish.productUrl}"><br><br>
+
+    <label for="wishImageUrl">Billede URL:</label>
+    <input type="url" id="wishImageUrl" name="wishImageUrl" th:value="${wish.imageUrl}"><br><br>
+
+    <button type="submit">Opdater Ønske</button>
+</form>
+
+<a th:href="@{'/wishlist/wishlist/' + ${wish.wishlistId}}">Tilbage til ønskelisten</a>
+
+</body>
+</html>

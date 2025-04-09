@@ -68,11 +68,9 @@ public class WishlistRepository extends Repository<Wishlist> {
         }
     }
 
-    public Map<Integer, Wishlist> getAllWishlistsById(int id) {
+    public List<Wishlist> getAllWishlistsById(int id) {
         String sql = "SELECT * FROM wishlists WHERE user_id = ?";
-        List<Wishlist> wishlists = jdbcTemplate.query(sql, BeanPropertyRowMapper.newInstance(Wishlist.class), id);
-
-        return wishlists.stream().collect(Collectors.toMap(Wishlist::getWishlistId, Wishlist -> Wishlist));
+        return jdbcTemplate.query(sql, BeanPropertyRowMapper.newInstance(Wishlist.class), id);
     }
 
 

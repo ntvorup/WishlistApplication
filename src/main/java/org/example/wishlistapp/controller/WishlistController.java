@@ -23,6 +23,14 @@ public class WishlistController {
         this.wishlistService = wishlistService;
     }
 
+    @GetMapping("/wishlist/{wishlistId}/addWish")
+    public String showAddWishForm(@PathVariable int wishlistId, Model model) {
+        Wish wish = new Wish();
+        model.addAttribute("wish", wish);
+        model.addAttribute("wishlistId", wishlistId);
+        return "addwish"; //
+    }
+
 
     // Get all wishlists
     @GetMapping("/user/{id}")
@@ -55,7 +63,7 @@ public class WishlistController {
         Wishlist newWishlist = new Wishlist();
 
         model.addAttribute("newWishlist", newWishlist);
-        return "addWishlist";
+        return "addwishlist";
     }
 
     @PostMapping("/saveWishlist")
@@ -65,7 +73,7 @@ public class WishlistController {
         Integer userId = (Integer) session.getAttribute("userId");
 
         if (userId == null) {
-            return "redirect:/index";
+            return "wishlist";
         }
 
         newWishlist.setUserId(userId);
@@ -73,7 +81,7 @@ public class WishlistController {
 
         wishlistService.addWishlistToDatabase(newWishlist);
 
-        return "redirect:/user/" + userId;
+        return "redirect:/wishlist/user/" + userId;
     }
 
     @GetMapping("/wishlist/edit/{wishlistId}")
@@ -81,7 +89,7 @@ public class WishlistController {
         Integer userId = (Integer) session.getAttribute("userId");
 
         if (userId == null) {
-            return "redirect:/index";
+            return "redirect:/wishlist/user/" + userId;
         }
 
         Wishlist wishlist = wishlistService.findById(wishlistId);
@@ -91,7 +99,8 @@ public class WishlistController {
         }
 
         model.addAttribute("wishlist", wishlist);
-        return "editWishlist";
+        return "redirect:/wishlist/user/" + userId;
+
     }
 
     @PostMapping("/wishlist/edit")
@@ -99,11 +108,11 @@ public class WishlistController {
         Integer userId = (Integer) session.getAttribute("userId");
 
         if (userId == null || !userId.equals(wishlist.getUserId())) {
-            return "redirect:/index";
+            return "redirect:/";
         }
 
         wishlistService.editWishlist(wishlist);
-        return "redirect:/user/" + userId;
+        return "redirect:/wishlist/user/" + userId;
     }
 
     @PostMapping("wishlist/{wishlistId}/delete")
@@ -111,7 +120,7 @@ public class WishlistController {
         Integer userId = (Integer) session.getAttribute("userId");
 
         wishlistService.deleteWishlistFromDatabase(wishlistService.findById(wishlistId));
-        return "redirect:/user/" + userId;
+        return "redirect:/wishlist/user/" + userId;
     }
 
 
@@ -126,7 +135,7 @@ public class WishlistController {
         return "/wish";
     }
 
-    @PostMapping("/wishlist/{wishlistId}/wish")
+    @PostMapping("/{wishlistId}/wish")
     public String addWish(@PathVariable int wishlistId,
                           @RequestParam("wishTitle") String wishTitle,
                           @RequestParam(value = "wishDescription", required = false) String wishDescription,
@@ -155,7 +164,7 @@ public class WishlistController {
 
         wishlistService.addWishToWishlist(newWish, wishlistId);
 
-        return "redirect:/wishlist/" + wishlistId;
+        return "redirect:/wishlist/wishlist/" + wishlistId;
     }
 
     @PostMapping("/wishlist/{wishlistId}/wish/{wishId}/delete")
@@ -167,7 +176,7 @@ public class WishlistController {
 
         wishlistService.deleteWishFromWishlist(wishlistService.getWishById(wishId));
 
-        return "redirect:/wishlist/" + wishlistId;
+        return "redirect:/wishlist/wishlist/" + wishlistId;
     }
 
     @GetMapping("/wishlist/{wishlistId}/wish/{wishId}/edit")
@@ -178,7 +187,7 @@ public class WishlistController {
         Integer userId = (Integer) session.getAttribute("userId");
 
         if (userId == null) {
-            return "redirect:/wishlist";
+            return "wishlist";
         }
 
         Wish wish = wishlistService.getWishById(wishId);
