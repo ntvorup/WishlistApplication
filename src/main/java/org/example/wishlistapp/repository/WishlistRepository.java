@@ -44,7 +44,7 @@ public class WishlistRepository extends Repository<Wishlist> {
     @Override
     @Transactional
     public Wishlist findById(int wishlistId) {
-        String sql = "SELECT * FROM wishlists WHERE wishlist_id = ?";
+        String sql = "SELECT wishlist_id, user_id, title AS wishlistTitle FROM wishlists WHERE wishlist_id = ?";
 
         try {
             return jdbcTemplate.queryForObject(sql, BeanPropertyRowMapper.newInstance(Wishlist.class), wishlistId);
@@ -69,13 +69,13 @@ public class WishlistRepository extends Repository<Wishlist> {
     }
 
     public List<Wishlist> getAllWishlistsById(int id) {
-        String sql = "SELECT * FROM wishlists WHERE user_id = ?";
+        String sql = "SELECT wishlist_id, user_id, title AS wishlistTitle FROM wishlists";
         return jdbcTemplate.query(sql, BeanPropertyRowMapper.newInstance(Wishlist.class), id);
     }
 
 
     //Wish Methods
-
+    @Transactional
     public void addWishToWishlist(Wish newWishToAdd, int wishlistId) {
         String sql = "INSERT INTO wishes (wishlist_id, title, description, price, url, image_url) VALUES (?,?,?,?,?,?)";
 
@@ -115,7 +115,13 @@ public class WishlistRepository extends Repository<Wishlist> {
 
     //Gets all the wishes on a wishlist.
     public Map<Integer, Wish> getWishesByWishlistId(int wishlistId) {
-        String sql = "SELECT * FROM wishes WHERE wishlist_id = ?";
+        String sql = "SELECT wish_id, wishlist_id, " +
+                "title AS wishTitle, " +
+                "description AS wishDescription, " +
+                "price AS wishPrice, " +
+                "url AS productUrl, " +
+                "image_url AS imageUrl " +
+                "FROM wishes WHERE wishlist_id = ?";
 
         List<Wish> wishList = jdbcTemplate.query(sql, BeanPropertyRowMapper.newInstance(Wish.class), wishlistId);
 
