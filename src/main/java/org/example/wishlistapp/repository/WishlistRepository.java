@@ -135,7 +135,7 @@ public class WishlistRepository extends Repository<Wishlist> {
                 "price AS wishPrice, " +
                 "url AS productUrl, " +
                 "image_url AS imageUrl " +
-                "FROM wishes WHERE wishlist_id = ?";
+                "FROM wishes WHERE wish_id = ?";
 
         return jdbcTemplate.queryForObject(sql, BeanPropertyRowMapper.newInstance(Wish.class), wishId);
     }

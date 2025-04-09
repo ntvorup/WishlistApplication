@@ -26,19 +26,6 @@ public class UserController {
         return "index"; //
     }
 
-    @GetMapping("/user/{id}")
-    public String showUserPage(@PathVariable int id, HttpSession session, Model model) {
-        Integer userId = (Integer) session.getAttribute("userId");
-
-        if (userId == null || userId != id) {
-            return "redirect:/";
-        }
-
-        User user = userService.findById(userId);
-        model.addAttribute("currentUser", user);
-        return "user";
-    }
-
     @PostMapping("/login")
     public String loginWithEmailAndPassword(@RequestParam String email,
                                             @RequestParam String password,

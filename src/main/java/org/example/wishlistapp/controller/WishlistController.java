@@ -43,7 +43,7 @@ public class WishlistController {
         }
 
         model.addAttribute("wishlists", wishlistService.getAllWishlistsById(userSessionId));
-        return "/user";
+        return "user";
     }
 
 
