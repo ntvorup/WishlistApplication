@@ -26,7 +26,7 @@ jobs:
 
       - name: Build with Maven
         env:
-          DEV_DATABASE_URL: ${{secrets.DEV_URL}}
+          DEV_URL: ${{secrets.DEV_URL}}
           DEV_USERNAME: ${{secrets.DEV_USERNAME}}
           DEV_PASSWORD: ${{secrets.DEV_PASSWORD}}
           
